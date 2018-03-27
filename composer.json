@@ -1,0 +1,38 @@
+{
+  "name": "bluemvc/bluemvc-api",
+  "description": "API extension for the BlueMvc PHP framework",
+  "homepage": "https://bluemvc.com/",
+  "license": "MIT",
+  "keywords": [
+    "blue",
+    "mvc",
+    "framework",
+    "php",
+    "api"
+  ],
+  "authors": [
+    {
+      "name": "Michael Hall",
+      "homepage": "https://michaelhall.se/"
+    }
+  ],
+  "require": {
+    "php": ">=5.6",
+    "datatypes/datatypes": "~1.0||~2.0",
+    "bluemvc/bluemvc-core": "dev-develop"
+  },
+  "require-dev": {
+    "bluemvc/bluemvc-fakes": "dev-develop",
+    "phpunit/phpunit": "~5.5||~6.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "BlueMvc\\Api\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "BlueMvc\\Api\\Tests\\": "tests"
+    }
+  }
+}
