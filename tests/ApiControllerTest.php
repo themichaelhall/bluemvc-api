@@ -36,7 +36,6 @@ class ApiControllerTest extends TestCase
      */
     public function testPostRequestWithContent()
     {
-
         $request = new FakeRequest('/', 'post');
         $request->setRawContent('{"Foo":"Bar"}');
         $response = new FakeResponse();

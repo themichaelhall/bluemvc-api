@@ -17,7 +17,7 @@ use BlueMvc\Core\Interfaces\ResponseInterface;
  *
  * @since 1.1.0
  */
-class ApiController extends AbstractController
+abstract class ApiController extends AbstractController
 {
     /**
      * Constructs the controller.
