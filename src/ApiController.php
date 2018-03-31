@@ -90,7 +90,6 @@ abstract class ApiController extends AbstractController
             $this->getResponse()->setStatusCode(new StatusCode(StatusCode::BAD_REQUEST));
 
             return false;
-
         }
 
         return true;
