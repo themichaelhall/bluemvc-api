@@ -48,6 +48,22 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test POST request with invalid content.
+     */
+    public function testPostRequestWithInvalidContent()
+    {
+        $request = new FakeRequest('/', 'post');
+        $request->setRawContent('{"Foo"');
+        $response = new FakeResponse();
+
+        $this->application->run($request, $response);
+
+        self::assertSame(StatusCode::BAD_REQUEST, $response->getStatusCode()->getCode());
+        self::assertSame([], iterator_to_array($response->getHeaders()));
+        self::assertSame('', $response->getContent());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

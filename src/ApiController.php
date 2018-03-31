@@ -8,6 +8,7 @@
 namespace BlueMvc\Api;
 
 use BlueMvc\Core\Base\AbstractController;
+use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
@@ -58,7 +59,9 @@ abstract class ApiController extends AbstractController
     {
         parent::processRequest($application, $request, $response, $action, $parameters);
 
-        $this->readContent();
+        if (!$this->readContent()) {
+            return;
+        }
 
         $method = $this->getRequest()->getMethod()->getName();
 
@@ -70,6 +73,8 @@ abstract class ApiController extends AbstractController
 
     /**
      * Reads the content.
+     *
+     * @return bool True if content was successfully read, false otherwise.
      */
     private function readContent()
     {
@@ -77,10 +82,18 @@ abstract class ApiController extends AbstractController
         if ($rawContent === '') {
             $this->content = null;
 
-            return;
+            return true;
         }
 
         $this->content = json_decode($rawContent, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->getResponse()->setStatusCode(new StatusCode(StatusCode::BAD_REQUEST));
+
+            return false;
+
+        }
+
+        return true;
     }
 
     /**

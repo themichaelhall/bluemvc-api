@@ -48,6 +48,22 @@ class ApiControllerTest extends TestCase
     }
 
     /**
+     * Test a POST request with invalid content.
+     */
+    public function testPostRequestWithInvalidContent()
+    {
+        $request = new FakeRequest('/', 'post');
+        $request->setRawContent('FooBar');
+        $response = new FakeResponse();
+        $controller = new BasicTestController();
+        $controller->processRequest($this->application, $request, $response, '', []);
+
+        self::assertSame(StatusCode::BAD_REQUEST, $response->getStatusCode()->getCode());
+        self::assertNull($response->getHeader('Content-Type'));
+        self::assertSame('', $response->getContent());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
