@@ -27,6 +27,20 @@ class ApiController extends AbstractController
     public function __construct()
     {
         parent::__construct();
+
+        $this->content = null;
+    }
+
+    /**
+     * Returns the content or null if there is no content.
+     *
+     * @since 1.1.0
+     *
+     * @return array|null The content or null if there is no content.
+     */
+    public function getContent()
+    {
+        return $this->content;
     }
 
     /**
@@ -44,6 +58,8 @@ class ApiController extends AbstractController
     {
         parent::processRequest($application, $request, $response, $action, $parameters);
 
+        $this->readContent();
+
         $method = $this->getRequest()->getMethod()->getName();
 
         $this->tryInvokeActionMethod($method, $parameters, false, $result);
@@ -51,4 +67,24 @@ class ApiController extends AbstractController
         $response->setContent(json_encode($result));
         $response->setHeader('Content-Type', 'application/json');
     }
+
+    /**
+     * Reads the content.
+     */
+    private function readContent()
+    {
+        $rawContent = $this->getRequest()->getRawContent();
+        if ($rawContent === '') {
+            $this->content = null;
+
+            return;
+        }
+
+        $this->content = json_decode($rawContent, true);
+    }
+
+    /**
+     * @var array|null My content or null if no content.
+     */
+    private $content;
 }

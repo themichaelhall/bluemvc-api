@@ -16,6 +16,22 @@ class BasicTestController extends ApiController
      */
     public function getAction()
     {
-        return ['actionMethod' => 'getAction'];
+        return [
+            'actionMethod' => 'getAction',
+            'content'      => $this->getContent(),
+        ];
+    }
+
+    /**
+     * POST action.
+     *
+     * @return array The result.
+     */
+    public function postAction()
+    {
+        return [
+            'actionMethod' => 'postAction',
+            'content'      => $this->getContent(),
+        ];
     }
 }
