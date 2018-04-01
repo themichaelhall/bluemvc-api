@@ -65,7 +65,11 @@ abstract class ApiController extends AbstractController
 
         $method = $this->getRequest()->getMethod()->getName();
 
-        $this->tryInvokeActionMethod($method, $parameters, false, $result);
+        if (!$this->tryInvokeActionMethod($method, $parameters, false, $result)) {
+            $response->setStatusCode(new StatusCode(StatusCode::METHOD_NOT_ALLOWED));
+
+            return;
+        }
 
         $response->setContent(json_encode($result));
         $response->setHeader('Content-Type', 'application/json');

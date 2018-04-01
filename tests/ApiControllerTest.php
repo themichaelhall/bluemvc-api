@@ -64,6 +64,22 @@ class ApiControllerTest extends TestCase
     }
 
     /**
+     * Test a request with invalid method.
+     */
+    public function testRequestWithInvalidMethod()
+    {
+        $application = new FakeApplication(__DIR__);
+        $request = new FakeRequest('/', 'put');
+        $response = new FakeResponse();
+        $controller = new BasicTestController();
+        $controller->processRequest($application, $request, $response, '', []);
+
+        self::assertSame(StatusCode::METHOD_NOT_ALLOWED, $response->getStatusCode()->getCode());
+        self::assertNull($response->getHeader('Content-Type'));
+        self::assertSame('', $response->getContent());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

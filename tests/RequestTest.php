@@ -64,6 +64,21 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test request with invalid method.
+     */
+    public function testRequestWithInvalidMethod()
+    {
+        $request = new FakeRequest('/', 'delete');
+        $response = new FakeResponse();
+
+        $this->application->run($request, $response);
+
+        self::assertSame(StatusCode::METHOD_NOT_ALLOWED, $response->getStatusCode()->getCode());
+        self::assertSame([], iterator_to_array($response->getHeaders()));
+        self::assertSame('', $response->getContent());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
