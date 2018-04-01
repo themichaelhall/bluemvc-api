@@ -34,4 +34,20 @@ class BasicTestController extends ApiController
             'content'      => $this->getContent(),
         ];
     }
+
+    /**
+     * PATCH action.
+     *
+     * @param string $parameter A required parameter.
+     *
+     * @return array The result.
+     */
+    public function patchAction($parameter)
+    {
+        return [
+            'actionMethod' => 'patchAction',
+            'content'      => $this->getContent(),
+            'parameter'    => $parameter,
+        ];
+    }
 }

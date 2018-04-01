@@ -65,8 +65,15 @@ abstract class ApiController extends AbstractController
 
         $method = $this->getRequest()->getMethod()->getName();
 
-        if (!$this->tryInvokeActionMethod($method, $parameters, false, $result)) {
-            $response->setStatusCode(new StatusCode(StatusCode::METHOD_NOT_ALLOWED));
+        if ($action !== '') {
+            $parameters = array_merge([$action], $parameters);
+        }
+
+        if (!$this->tryInvokeActionMethod($method, $parameters, false, $result, $hasFoundActionMethod)) {
+            $statusCode = $hasFoundActionMethod ?
+                new StatusCode(StatusCode::NOT_FOUND) :
+                new StatusCode(StatusCode::METHOD_NOT_ALLOWED);
+            $response->setStatusCode($statusCode);
 
             return;
         }

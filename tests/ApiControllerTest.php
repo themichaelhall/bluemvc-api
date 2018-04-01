@@ -20,11 +20,10 @@ class ApiControllerTest extends TestCase
      */
     public function testGetRequest()
     {
-        $application = new FakeApplication(__DIR__);
         $request = new FakeRequest('/');
         $response = new FakeResponse();
         $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, '', []);
+        $controller->processRequest($this->application, $request, $response, '', []);
 
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
         self::assertSame('application/json', $response->getHeader('Content-Type'));
@@ -68,13 +67,42 @@ class ApiControllerTest extends TestCase
      */
     public function testRequestWithInvalidMethod()
     {
-        $application = new FakeApplication(__DIR__);
         $request = new FakeRequest('/', 'put');
         $response = new FakeResponse();
         $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, '', []);
+        $controller->processRequest($this->application, $request, $response, '', []);
 
         self::assertSame(StatusCode::METHOD_NOT_ALLOWED, $response->getStatusCode()->getCode());
+        self::assertNull($response->getHeader('Content-Type'));
+        self::assertSame('', $response->getContent());
+    }
+
+    /**
+     * Test a request with parameter.
+     */
+    public function testRequestWithParameter()
+    {
+        $request = new FakeRequest('/foo', 'patch');
+        $response = new FakeResponse();
+        $controller = new BasicTestController();
+        $controller->processRequest($this->application, $request, $response, 'foo', []);
+
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('application/json', $response->getHeader('Content-Type'));
+        self::assertSame('{"actionMethod":"patchAction","content":null,"parameter":"foo"}', $response->getContent());
+    }
+
+    /**
+     * Test a request with missing required parameter.
+     */
+    public function testRequestWithMissingParameter()
+    {
+        $request = new FakeRequest('/', 'patch');
+        $response = new FakeResponse();
+        $controller = new BasicTestController();
+        $controller->processRequest($this->application, $request, $response, '', []);
+
+        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
         self::assertNull($response->getHeader('Content-Type'));
         self::assertSame('', $response->getContent());
     }

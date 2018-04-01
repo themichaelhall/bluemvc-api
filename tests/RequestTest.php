@@ -79,6 +79,38 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test request with parameter.
+     */
+    public function testRequestWithParameter()
+    {
+        $request = new FakeRequest('/Bar', 'patch');
+        $request->setRawContent('{"Foo":"Baz"}');
+        $response = new FakeResponse();
+
+        $this->application->run($request, $response);
+
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame(['Content-Type' => 'application/json'], iterator_to_array($response->getHeaders()));
+        self::assertSame('{"actionMethod":"patchAction","content":{"Foo":"Baz"},"parameter":"Bar"}', $response->getContent());
+    }
+
+    /**
+     * Test request with missing parameter.
+     */
+    public function testRequestWithMissingParameter()
+    {
+        $request = new FakeRequest('/', 'patch');
+        $request->setRawContent('{"Foo":"Baz"}');
+        $response = new FakeResponse();
+
+        $this->application->run($request, $response);
+
+        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+        self::assertSame([], iterator_to_array($response->getHeaders()));
+        self::assertSame('', $response->getContent());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
