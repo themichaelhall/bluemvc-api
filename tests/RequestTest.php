@@ -3,6 +3,7 @@
 namespace BlueMvc\Api\Tests;
 
 use BlueMvc\Api\Tests\Helpers\TestControllers\BasicTestController;
+use BlueMvc\Api\Tests\Helpers\TestControllers\ResultTypesController;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Route;
@@ -111,12 +112,28 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test request returning an action result.
+     */
+    public function testActionResult()
+    {
+        $request = new FakeRequest('/resultTypes/');
+        $response = new FakeResponse();
+
+        $this->application->run($request, $response);
+
+        self::assertSame(StatusCode::NOT_MODIFIED, $response->getStatusCode()->getCode());
+        self::assertSame([], iterator_to_array($response->getHeaders()));
+        self::assertSame('', $response->getContent());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
     {
         $this->application = new FakeApplication(__DIR__);
         $this->application->addRoute(new Route('', BasicTestController::class));
+        $this->application->addRoute(new Route('resultTypes', ResultTypesController::class));
     }
 
     /**

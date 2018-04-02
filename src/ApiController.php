@@ -9,6 +9,7 @@ namespace BlueMvc\Api;
 
 use BlueMvc\Core\Base\AbstractController;
 use BlueMvc\Core\Http\StatusCode;
+use BlueMvc\Core\Interfaces\ActionResults\ActionResultInterface;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
@@ -78,8 +79,24 @@ abstract class ApiController extends AbstractController
             return;
         }
 
-        $response->setContent(json_encode($result));
-        $response->setHeader('Content-Type', 'application/json');
+        $this->handleResult($result);
+    }
+
+    /**
+     * Handles the result.
+     *
+     * @param mixed $result The result.
+     */
+    private function handleResult($result)
+    {
+        if ($result instanceof ActionResultInterface) {
+            $result->updateResponse($this->getApplication(), $this->getRequest(), $this->getResponse());
+
+            return;
+        }
+
+        $this->getResponse()->setContent(json_encode($result));
+        $this->getResponse()->setHeader('Content-Type', 'application/json');
     }
 
     /**

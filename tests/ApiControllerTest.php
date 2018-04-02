@@ -3,6 +3,7 @@
 namespace BlueMvc\Api\Tests;
 
 use BlueMvc\Api\Tests\Helpers\TestControllers\BasicTestController;
+use BlueMvc\Api\Tests\Helpers\TestControllers\ResultTypesController;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Fakes\FakeApplication;
@@ -103,6 +104,21 @@ class ApiControllerTest extends TestCase
         $controller->processRequest($this->application, $request, $response, '', []);
 
         self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+        self::assertNull($response->getHeader('Content-Type'));
+        self::assertSame('', $response->getContent());
+    }
+
+    /**
+     * Test a request returning an action result.
+     */
+    public function testActionResult()
+    {
+        $request = new FakeRequest('/', 'get');
+        $response = new FakeResponse();
+        $controller = new ResultTypesController();
+        $controller->processRequest($this->application, $request, $response, '', []);
+
+        self::assertSame(StatusCode::NOT_MODIFIED, $response->getStatusCode()->getCode());
         self::assertNull($response->getHeader('Content-Type'));
         self::assertSame('', $response->getContent());
     }
