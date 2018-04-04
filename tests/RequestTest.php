@@ -127,6 +127,21 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test request returning an API result.
+     */
+    public function testApiResult()
+    {
+        $request = new FakeRequest('/resultTypes/', 'POST');
+        $response = new FakeResponse();
+
+        $this->application->run($request, $response);
+
+        self::assertSame(StatusCode::CREATED, $response->getStatusCode()->getCode());
+        self::assertSame(['Content-Type' => 'application/json'], iterator_to_array($response->getHeaders()));
+        self::assertSame('{"Message":"Resource was created"}', $response->getContent());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

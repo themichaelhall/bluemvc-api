@@ -124,6 +124,21 @@ class ApiControllerTest extends TestCase
     }
 
     /**
+     * Test a request returning an API result.
+     */
+    public function testApiResult()
+    {
+        $request = new FakeRequest('/', 'post');
+        $response = new FakeResponse();
+        $controller = new ResultTypesController();
+        $controller->processRequest($this->application, $request, $response, '', []);
+
+        self::assertSame(StatusCode::CREATED, $response->getStatusCode()->getCode());
+        self::assertSame('application/json', $response->getHeader('Content-Type'));
+        self::assertSame('{"Message":"Resource was created"}', $response->getContent());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
