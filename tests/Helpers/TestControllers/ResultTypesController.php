@@ -31,4 +31,17 @@ class ResultTypesController extends ApiController
     {
         return new ApiResult(new StatusCode(StatusCode::CREATED), ['Message' => 'Resource was created']);
     }
+
+    /**
+     * PUT action.
+     *
+     * @return null
+     */
+    public function putAction()
+    {
+        $this->getResponse()->setHeader('Content-Type', 'text/plain');
+        $this->getResponse()->setContent('This should not be altered.');
+
+        return null;
+    }
 }

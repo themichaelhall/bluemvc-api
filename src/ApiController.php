@@ -95,6 +95,10 @@ abstract class ApiController extends AbstractController
             return;
         }
 
+        if ($result === null) {
+            return;
+        }
+
         $this->getResponse()->setContent(json_encode($result));
         $this->getResponse()->setHeader('Content-Type', 'application/json');
     }

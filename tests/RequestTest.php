@@ -142,6 +142,21 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test request returning a null result.
+     */
+    public function testNullResult()
+    {
+        $request = new FakeRequest('/resultTypes/', 'PUT');
+        $response = new FakeResponse();
+
+        $this->application->run($request, $response);
+
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame(['Content-Type' => 'text/plain'], iterator_to_array($response->getHeaders()));
+        self::assertSame('This should not be altered.', $response->getContent());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

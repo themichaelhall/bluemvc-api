@@ -139,6 +139,21 @@ class ApiControllerTest extends TestCase
     }
 
     /**
+     * Test a request returning a null result.
+     */
+    public function testNullResult()
+    {
+        $request = new FakeRequest('/', 'put');
+        $response = new FakeResponse();
+        $controller = new ResultTypesController();
+        $controller->processRequest($this->application, $request, $response, '', []);
+
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('text/plain', $response->getHeader('Content-Type'));
+        self::assertSame('This should not be altered.', $response->getContent());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
