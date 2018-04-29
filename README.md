@@ -1,3 +1,7 @@
+<p align="center">
+   <img src="https://bm.staticfiles.se/img/logo-320x50.png" width="320" height="50" alt="BlueMvc logo">
+</p>
+
 # BlueMvc API
 
 [![Build Status](https://travis-ci.org/themichaelhall/bluemvc-api.svg?branch=master)](https://travis-ci.org/themichaelhall/bluemvc-api)
@@ -8,4 +12,24 @@
 [![Latest Stable Version](https://poser.pugx.org/bluemvc/bluemvc-api/v/stable)](https://packagist.org/packages/bluemvc/bluemvc-api)
 [![Total Downloads](https://poser.pugx.org/bluemvc/bluemvc-api/downloads)](https://packagist.org/packages/bluemvc/bluemvc-api)
 
-This project is under construction and is not yet complete. Please check back later.
+API extension for the [BlueMvc PHP framework](https://github.com/themichaelhall/bluemvc).
+
+## Requirements
+
+- PHP >= 5.6
+
+## Install with Composer
+
+``` bash
+$ composer require bluemvc/bluemvc-api
+```
+
+## Documentation
+
+The official documentation is located at [bluemvc.com](https://bluemvc.com/)
+
+- [Get started](https://bluemvc.com/get-started/)
+
+## License
+
+MIT
