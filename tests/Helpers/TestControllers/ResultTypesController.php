@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Api\Tests\Helpers\TestControllers;
 
 use BlueMvc\Api\ActionResults\ApiResult;
