@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Api;
 
@@ -40,7 +41,7 @@ abstract class ApiController extends AbstractController
      *
      * @return array|null The content or null if there is no content.
      */
-    public function getContent()
+    public function getContent(): ?array
     {
         return $this->content;
     }
@@ -56,7 +57,7 @@ abstract class ApiController extends AbstractController
      * @param string               $action      The action.
      * @param array                $parameters  The parameters.
      */
-    public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, $action, array $parameters = [])
+    public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $action, array $parameters = []): void
     {
         parent::processRequest($application, $request, $response, $action, $parameters);
 
@@ -87,7 +88,7 @@ abstract class ApiController extends AbstractController
      *
      * @param mixed $result The result.
      */
-    private function handleResult($result)
+    private function handleResult($result): void
     {
         if ($result instanceof ActionResultInterface) {
             $result->updateResponse($this->getApplication(), $this->getRequest(), $this->getResponse());
@@ -108,7 +109,7 @@ abstract class ApiController extends AbstractController
      *
      * @return bool True if content was successfully read, false otherwise.
      */
-    private function readContent()
+    private function readContent(): bool
     {
         $rawContent = $this->getRequest()->getRawContent();
         if ($rawContent === '') {
