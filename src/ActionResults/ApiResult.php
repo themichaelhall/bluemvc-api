@@ -26,13 +26,13 @@ class ApiResult implements ActionResultInterface
      *
      * @since 1.1.0
      *
-     * @param StatusCodeInterface $statusCode The status code.
      * @param mixed|null          $content    The content.
+     * @param StatusCodeInterface $statusCode The status code.
      */
-    public function __construct(StatusCodeInterface $statusCode, $content = null)
+    public function __construct($content, StatusCodeInterface $statusCode)
     {
-        $this->statusCode = $statusCode;
         $this->content = $content;
+        $this->statusCode = $statusCode;
     }
 
     /**
@@ -47,15 +47,8 @@ class ApiResult implements ActionResultInterface
     public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response): void
     {
         $response->setStatusCode($this->statusCode);
-
-        if ($this->content === null) {
-            $response->setContent('');
-
-            return;
-        }
-
-        $response->setContent(json_encode($this->content));
         $response->setHeader('Content-Type', 'application/json');
+        $response->setContent(json_encode($this->content));
     }
 
     /**

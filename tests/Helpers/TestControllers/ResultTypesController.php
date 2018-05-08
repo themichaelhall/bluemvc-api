@@ -31,7 +31,7 @@ class ResultTypesController extends ApiController
      */
     public function postAction()
     {
-        return new ApiResult(new StatusCode(StatusCode::CREATED), ['Message' => 'Resource was created']);
+        return new ApiResult(['Message' => 'Resource was created'], new StatusCode(StatusCode::CREATED));
     }
 
     /**
