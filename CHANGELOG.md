@@ -1,3 +1,5 @@
+## Unreleased
+
 ## [2.0.0] - 2018-05-14
 - **Backward compatibility break**: Changed parameter order in constructor in ApiResult class.
 - Updated PHP requirement to 7.1.
