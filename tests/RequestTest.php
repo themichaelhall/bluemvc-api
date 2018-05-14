@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Api\Tests;
 
 use BlueMvc\Api\Tests\Helpers\TestControllers\BasicTestController;
