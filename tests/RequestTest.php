@@ -144,6 +144,21 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test request throwing an API result exception.
+     */
+    public function testApiResultException()
+    {
+        $request = new FakeRequest('/resultTypes/', 'DELETE');
+        $response = new FakeResponse();
+
+        $this->application->run($request, $response);
+
+        self::assertSame(StatusCode::NETWORK_AUTHENTICATION_REQUIRED, $response->getStatusCode()->getCode());
+        self::assertSame(['Content-Type' => 'application/json'], iterator_to_array($response->getHeaders()));
+        self::assertSame('{"Message":"Failed to remove resource"}', $response->getContent());
+    }
+
+    /**
      * Test request returning a null result.
      */
     public function testNullResult()

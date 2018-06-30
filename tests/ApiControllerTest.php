@@ -141,6 +141,21 @@ class ApiControllerTest extends TestCase
     }
 
     /**
+     * Test a request throwing an API result exception.
+     */
+    public function testApiResultException()
+    {
+        $request = new FakeRequest('/', 'delete');
+        $response = new FakeResponse();
+        $controller = new ResultTypesController();
+        $controller->processRequest($this->application, $request, $response, '', []);
+
+        self::assertSame(StatusCode::NETWORK_AUTHENTICATION_REQUIRED, $response->getStatusCode()->getCode());
+        self::assertSame('application/json', $response->getHeader('Content-Type'));
+        self::assertSame('{"Message":"Failed to remove resource"}', $response->getContent());
+    }
+
+    /**
      * Test a request returning a null result.
      */
     public function testNullResult()

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BlueMvc\Api\Tests\Helpers\TestControllers;
 
 use BlueMvc\Api\ActionResults\ApiResult;
+use BlueMvc\Api\ActionResults\ApiResultException;
 use BlueMvc\Api\ApiController;
 use BlueMvc\Core\ActionResults\NotModifiedResult;
 use BlueMvc\Core\Http\StatusCode;
@@ -45,5 +46,15 @@ class ResultTypesController extends ApiController
         $this->getResponse()->setContent('This should not be altered.');
 
         return null;
+    }
+
+    /**
+     * DELETE action.
+     *
+     * @throws ApiResultException
+     */
+    public function deleteAction()
+    {
+        throw new ApiResultException(['Message' => 'Failed to remove resource'], new StatusCode(StatusCode::NETWORK_AUTHENTICATION_REQUIRED));
     }
 }
