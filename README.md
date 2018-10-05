@@ -5,6 +5,7 @@
 # BlueMvc API
 
 [![Build Status](https://travis-ci.org/themichaelhall/bluemvc-api.svg?branch=master)](https://travis-ci.org/themichaelhall/bluemvc-api)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/github/themichaelhall/bluemvc-api?branch=master&svg=true)](https://ci.appveyor.com/project/themichaelhall/bluemvc-api/branch/master)
 [![codecov.io](https://codecov.io/gh/themichaelhall/bluemvc-api/coverage.svg?branch=master)](https://codecov.io/gh/themichaelhall/bluemvc-api?branch=master)
 [![StyleCI](https://styleci.io/repos/126730223/shield?style=flat)](https://styleci.io/repos/126730223)
 [![License](https://poser.pugx.org/bluemvc/bluemvc-api/license)](https://packagist.org/packages/bluemvc/bluemvc-api)
