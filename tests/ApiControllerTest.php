@@ -19,155 +19,87 @@ use PHPUnit\Framework\TestCase;
 class ApiControllerTest extends TestCase
 {
     /**
-     * Test a GET request.
+     * Test basic test controller.
+     *
+     * @dataProvider basicTestControllerDataProvider
+     *
+     * @param string      $path                The path.
+     * @param string      $method              The method.
+     * @param null|string $rawContent          The raw content or null if no raw content.
+     * @param int         $expectedStatusCode  The expected status code.
+     * @param null|string $expectedContentType The expected content type header or null if no content type header is expected.
+     * @param string      $expectedContent     The expected content.
      */
-    public function testGetRequest()
+    public function testBasicTestController(string $path, string $method, ?string $rawContent, int $expectedStatusCode, ?string $expectedContentType, string $expectedContent)
     {
-        $request = new FakeRequest('/');
+        $request = new FakeRequest('/', $method);
+        if ($rawContent !== null) {
+            $request->setRawContent($rawContent);
+        }
         $response = new FakeResponse();
         $controller = new BasicTestController();
-        $controller->processRequest($this->application, $request, $response, '', []);
+        $controller->processRequest($this->application, $request, $response, $path, []);
 
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-        self::assertSame('application/json', $response->getHeader('Content-Type'));
-        self::assertSame('{"actionMethod":"getAction","content":null}', $response->getContent());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedContentType, $response->getHeader('Content-Type'));
+        self::assertSame($expectedContent, $response->getContent());
     }
 
     /**
-     * Test a POST request with content.
+     * Data provider for testBasicTestController.
+     *
+     * @return array
      */
-    public function testPostRequestWithContent()
+    public function basicTestControllerDataProvider()
     {
-        $request = new FakeRequest('/', 'post');
-        $request->setRawContent('{"Foo":"Bar"}');
-        $response = new FakeResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($this->application, $request, $response, '', []);
-
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-        self::assertSame('application/json', $response->getHeader('Content-Type'));
-        self::assertSame('{"actionMethod":"postAction","content":{"Foo":"Bar"}}', $response->getContent());
+        return [
+            ['', 'get', null, StatusCode::OK, 'application/json', '{"actionMethod":"getAction","content":null}'],
+            ['', 'get', '{"Foo":"Bar"}', StatusCode::OK, 'application/json', '{"actionMethod":"getAction","content":{"Foo":"Bar"}}'],
+            ['', 'post', null, StatusCode::OK, 'application/json', '{"actionMethod":"postAction","content":null}'],
+            ['', 'post', '{"Foo":"Bar"}', StatusCode::OK, 'application/json', '{"actionMethod":"postAction","content":{"Foo":"Bar"}}'],
+            ['', 'post', 'FooBar', StatusCode::BAD_REQUEST, null, ''],
+            ['', 'put', null, StatusCode::METHOD_NOT_ALLOWED, null, ''],
+            ['foo', 'patch', null, StatusCode::OK, 'application/json', '{"actionMethod":"patchAction","content":null,"parameter":"foo"}'],
+            ['foo', 'patch', '{"Foo":"Bar"}', StatusCode::OK, 'application/json', '{"actionMethod":"patchAction","content":{"Foo":"Bar"},"parameter":"foo"}'],
+            ['', 'patch', null, StatusCode::NOT_FOUND, null, ''],
+        ];
     }
 
     /**
-     * Test a POST request with invalid content.
+     * Test result types test controller.
+     *
+     * @dataProvider resultTypesTestControllerDataProvider
+     *
+     * @param string      $method              The method.
+     * @param int         $expectedStatusCode  The expected status code.
+     * @param null|string $expectedContentType The expected content type header or null if no content type header is expected.
+     * @param string      $expectedContent     The expected content.
      */
-    public function testPostRequestWithInvalidContent()
+    public function testResultTypesTestController(string $method, int $expectedStatusCode, ?string $expectedContentType, string $expectedContent)
     {
-        $request = new FakeRequest('/', 'post');
-        $request->setRawContent('FooBar');
-        $response = new FakeResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($this->application, $request, $response, '', []);
-
-        self::assertSame(StatusCode::BAD_REQUEST, $response->getStatusCode()->getCode());
-        self::assertNull($response->getHeader('Content-Type'));
-        self::assertSame('', $response->getContent());
-    }
-
-    /**
-     * Test a request with invalid method.
-     */
-    public function testRequestWithInvalidMethod()
-    {
-        $request = new FakeRequest('/', 'put');
-        $response = new FakeResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($this->application, $request, $response, '', []);
-
-        self::assertSame(StatusCode::METHOD_NOT_ALLOWED, $response->getStatusCode()->getCode());
-        self::assertNull($response->getHeader('Content-Type'));
-        self::assertSame('', $response->getContent());
-    }
-
-    /**
-     * Test a request with parameter.
-     */
-    public function testRequestWithParameter()
-    {
-        $request = new FakeRequest('/foo', 'patch');
-        $response = new FakeResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($this->application, $request, $response, 'foo', []);
-
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-        self::assertSame('application/json', $response->getHeader('Content-Type'));
-        self::assertSame('{"actionMethod":"patchAction","content":null,"parameter":"foo"}', $response->getContent());
-    }
-
-    /**
-     * Test a request with missing required parameter.
-     */
-    public function testRequestWithMissingParameter()
-    {
-        $request = new FakeRequest('/', 'patch');
-        $response = new FakeResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($this->application, $request, $response, '', []);
-
-        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
-        self::assertNull($response->getHeader('Content-Type'));
-        self::assertSame('', $response->getContent());
-    }
-
-    /**
-     * Test a request returning an action result.
-     */
-    public function testActionResult()
-    {
-        $request = new FakeRequest('/', 'get');
+        $request = new FakeRequest('/', $method);
         $response = new FakeResponse();
         $controller = new ResultTypesController();
         $controller->processRequest($this->application, $request, $response, '', []);
 
-        self::assertSame(StatusCode::NOT_MODIFIED, $response->getStatusCode()->getCode());
-        self::assertNull($response->getHeader('Content-Type'));
-        self::assertSame('', $response->getContent());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedContentType, $response->getHeader('Content-Type'));
+        self::assertSame($expectedContent, $response->getContent());
     }
 
     /**
-     * Test a request returning an API result.
+     * Data provider for testResultTypesTestController.
+     *
+     * @return array
      */
-    public function testApiResult()
+    public function resultTypesTestControllerDataProvider()
     {
-        $request = new FakeRequest('/', 'post');
-        $response = new FakeResponse();
-        $controller = new ResultTypesController();
-        $controller->processRequest($this->application, $request, $response, '', []);
-
-        self::assertSame(StatusCode::CREATED, $response->getStatusCode()->getCode());
-        self::assertSame('application/json', $response->getHeader('Content-Type'));
-        self::assertSame('{"Message":"Resource was created"}', $response->getContent());
-    }
-
-    /**
-     * Test a request throwing an API result exception.
-     */
-    public function testApiResultException()
-    {
-        $request = new FakeRequest('/', 'delete');
-        $response = new FakeResponse();
-        $controller = new ResultTypesController();
-        $controller->processRequest($this->application, $request, $response, '', []);
-
-        self::assertSame(StatusCode::NETWORK_AUTHENTICATION_REQUIRED, $response->getStatusCode()->getCode());
-        self::assertSame('application/json', $response->getHeader('Content-Type'));
-        self::assertSame('{"Message":"Failed to remove resource"}', $response->getContent());
-    }
-
-    /**
-     * Test a request returning a null result.
-     */
-    public function testNullResult()
-    {
-        $request = new FakeRequest('/', 'put');
-        $response = new FakeResponse();
-        $controller = new ResultTypesController();
-        $controller->processRequest($this->application, $request, $response, '', []);
-
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-        self::assertSame('text/plain', $response->getHeader('Content-Type'));
-        self::assertSame('This should not be altered.', $response->getContent());
+        return [
+            ['get', StatusCode::NOT_MODIFIED, null, ''],
+            ['post', StatusCode::CREATED, 'application/json', '{"Message":"Resource was created"}'],
+            ['delete', StatusCode::NETWORK_AUTHENTICATION_REQUIRED, 'application/json', '{"Message":"Failed to remove resource"}'],
+            ['put', StatusCode::OK, 'text/plain', 'This should not be altered.'],
+        ];
     }
 
     /**
