@@ -1,5 +1,6 @@
 ## Unreleased
 - Added ApiResultException class.
+- Added getJsonEncodeOptions method to ApiController class.
 
 ## [2.0.0] - 2018-05-14
 - **Backward compatibility break**: Changed parameter order in constructor in ApiResult class.

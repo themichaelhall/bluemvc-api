@@ -7,7 +7,6 @@ namespace BlueMvc\Api\Tests;
 use BlueMvc\Api\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Api\Tests\Helpers\TestControllers\ResultTypesController;
 use BlueMvc\Core\Http\StatusCode;
-use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Fakes\FakeApplication;
 use BlueMvc\Fakes\FakeRequest;
 use BlueMvc\Fakes\FakeResponse;
@@ -66,6 +65,22 @@ class ApiControllerTest extends TestCase
     }
 
     /**
+     * Test JSON is pretty printed in debug mode.
+     */
+    public function testJsonIsPrettyPrintedInDebugMode()
+    {
+        $this->application->setDebug(true);
+        $request = new FakeRequest('/', 'get');
+        $response = new FakeResponse();
+        $controller = new BasicTestController();
+        $controller->processRequest($this->application, $request, $response, '', []);
+
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame(['Content-Type' => 'application/json'], iterator_to_array($response->getHeaders()));
+        self::assertSame(json_encode(['actionMethod' => 'getAction', 'content' => null], JSON_PRETTY_PRINT), $response->getContent());
+    }
+
+    /**
      * Test result types test controller.
      *
      * @dataProvider resultTypesTestControllerDataProvider
@@ -119,7 +134,7 @@ class ApiControllerTest extends TestCase
     }
 
     /**
-     * @var ApplicationInterface My application.
+     * @var FakeApplication My application.
      */
     private $application;
 }

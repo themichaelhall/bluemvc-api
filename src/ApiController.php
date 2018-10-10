@@ -84,6 +84,18 @@ abstract class ApiController extends AbstractController
     }
 
     /**
+     * Returns the options used for JSON encoding.
+     *
+     * @since 2.1.0
+     *
+     * @return int The options.
+     */
+    protected function getJsonEncodeOptions(): int
+    {
+        return $this->getApplication()->isDebug() ? JSON_PRETTY_PRINT : 0;
+    }
+
+    /**
      * Handles the result.
      *
      * @param mixed $result The result.
@@ -100,7 +112,7 @@ abstract class ApiController extends AbstractController
             return;
         }
 
-        $this->getResponse()->setContent(json_encode($result));
+        $this->getResponse()->setContent(json_encode($result, $this->getJsonEncodeOptions()));
         $this->getResponse()->setHeader('Content-Type', 'application/json');
     }
 
