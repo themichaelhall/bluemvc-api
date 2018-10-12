@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BlueMvc\Api\Tests;
 
 use BlueMvc\Api\Tests\Helpers\TestControllers\BasicTestController;
+use BlueMvc\Api\Tests\Helpers\TestControllers\CustomJsonEncodeOptionsTestController;
 use BlueMvc\Api\Tests\Helpers\TestControllers\ResultTypesController;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Fakes\FakeApplication;
@@ -115,6 +116,21 @@ class ApiControllerTest extends TestCase
             ['delete', StatusCode::NETWORK_AUTHENTICATION_REQUIRED, 'application/json', '{"Message":"Failed to remove resource"}'],
             ['put', StatusCode::OK, 'text/plain', 'This should not be altered.'],
         ];
+    }
+
+    /**
+     * Test controller with custom JSON encode options.
+     */
+    public function testWithCustomJsonEncodeOptions()
+    {
+        $request = new FakeRequest();
+        $response = new FakeResponse();
+        $controller = new CustomJsonEncodeOptionsTestController();
+        $controller->processRequest($this->application, $request, $response, '', []);
+
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('application/json', $response->getHeader('Content-Type'));
+        self::assertSame('{"0":"Bar","1":42}', $response->getContent());
     }
 
     /**
