@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BlueMvc\Api\Tests;
 
 use BlueMvc\Api\Tests\Helpers\TestControllers\BasicTestController;
+use BlueMvc\Api\Tests\Helpers\TestControllers\InvalidJsonResultTestController;
 use BlueMvc\Api\Tests\Helpers\TestControllers\ResultTypesController;
 use BlueMvc\Core\Http\StatusCode;
-use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Route;
 use BlueMvc\Fakes\FakeApplication;
 use BlueMvc\Fakes\FakeRequest;
@@ -108,6 +108,40 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test invalid JSON result.
+     *
+     * @dataProvider invalidJsonResultDataProvider
+     *
+     * @param string $method          The method.
+     * @param string $expectedContent The expected content.
+     */
+    public function testInvalidJsonResult(string $method, string $expectedContent)
+    {
+        $this->application->setDebug(true);
+        $request = new FakeRequest('/invalidJsonResult/', $method);
+        $response = new FakeResponse();
+
+        $this->application->run($request, $response);
+
+        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+        self::assertSame([], iterator_to_array($response->getHeaders()));
+        self::assertContains($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Data provider for testInvalidJsonResult.
+     *
+     * @return array
+     */
+    public function invalidJsonResultDataProvider()
+    {
+        return [
+            ['get', 'The value includes either NAN or INF (JSON_ERROR_INF_OR_NAN).'],
+            ['post', 'Malformed UTF-8 characters, possibly incorrectly encoded (JSON_ERROR_UTF8).'],
+        ];
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
@@ -115,6 +149,7 @@ class RequestTest extends TestCase
         $this->application = new FakeApplication(__DIR__);
         $this->application->addRoute(new Route('', BasicTestController::class));
         $this->application->addRoute(new Route('resultTypes', ResultTypesController::class));
+        $this->application->addRoute(new Route('invalidJsonResult', InvalidJsonResultTestController::class));
     }
 
     /**
@@ -126,7 +161,7 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @var ApplicationInterface My application.
+     * @var FakeApplication My application.
      */
     private $application;
 }

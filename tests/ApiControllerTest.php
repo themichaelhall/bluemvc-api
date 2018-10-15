@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace BlueMvc\Api\Tests;
 
+use BlueMvc\Api\Exceptions\JsonException;
 use BlueMvc\Api\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Api\Tests\Helpers\TestControllers\CustomJsonEncodeOptionsTestController;
+use BlueMvc\Api\Tests\Helpers\TestControllers\InvalidJsonResultTestController;
 use BlueMvc\Api\Tests\Helpers\TestControllers\ResultTypesController;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Fakes\FakeApplication;
@@ -131,6 +133,44 @@ class ApiControllerTest extends TestCase
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
         self::assertSame('application/json', $response->getHeader('Content-Type'));
         self::assertSame('{"0":"Bar","1":42}', $response->getContent());
+    }
+
+    /**
+     * Test invalid json result test controller.
+     *
+     * @dataProvider invalidJsonResultTestControllerDataProvider
+     *
+     * @param string $method                   The method.
+     * @param string $expectedExceptionMessage The expected exception message.
+     * @param int    $expectedExceptionCode    The expected exception code.
+     */
+    public function testInvalidJsonResultTestController(string $method, string $expectedExceptionMessage, int $expectedExceptionCode)
+    {
+        $exception = null;
+        $request = new FakeRequest('/', $method);
+        $response = new FakeResponse();
+        $controller = new InvalidJsonResultTestController();
+
+        try {
+            $controller->processRequest($this->application, $request, $response, '', []);
+        } catch (JsonException $exception) {
+        }
+
+        self::assertSame($expectedExceptionMessage, $exception->getMessage());
+        self::assertSame($expectedExceptionCode, $exception->getCode());
+    }
+
+    /**
+     * Data provider for testInvalidJsonResultTestController.
+     *
+     * @return array
+     */
+    public function invalidJsonResultTestControllerDataProvider()
+    {
+        return [
+            ['get', 'The value includes either NAN or INF (JSON_ERROR_INF_OR_NAN).', JSON_ERROR_INF_OR_NAN],
+            ['post', 'Malformed UTF-8 characters, possibly incorrectly encoded (JSON_ERROR_UTF8).', JSON_ERROR_UTF8],
+        ];
     }
 
     /**

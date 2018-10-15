@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace BlueMvc\Api;
 
+use BlueMvc\Api\Exceptions\JsonException;
 use BlueMvc\Core\Base\AbstractController;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ActionResults\ActionResultInterface;
@@ -56,6 +57,8 @@ abstract class ApiController extends AbstractController
      * @param ResponseInterface    $response    The response.
      * @param string               $action      The action.
      * @param array                $parameters  The parameters.
+     *
+     * @throws JsonException If result could not be encoded as JSON.
      */
     public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $action, array $parameters = []): void
     {
@@ -99,6 +102,8 @@ abstract class ApiController extends AbstractController
      * Handles the result.
      *
      * @param mixed $result The result.
+     *
+     * @throws JsonException If result could not be encoded as JSON.
      */
     private function handleResult($result): void
     {
@@ -112,7 +117,12 @@ abstract class ApiController extends AbstractController
             return;
         }
 
-        $this->getResponse()->setContent(json_encode($result, $this->getJsonEncodeOptions()));
+        $jsonResult = json_encode($result, $this->getJsonEncodeOptions());
+        if ($jsonResult === false) {
+            throw new JsonException(json_last_error());
+        }
+
+        $this->getResponse()->setContent($jsonResult);
         $this->getResponse()->setHeader('Content-Type', 'application/json');
     }
 
