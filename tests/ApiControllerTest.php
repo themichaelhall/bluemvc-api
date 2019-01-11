@@ -178,6 +178,8 @@ class ApiControllerTest extends TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         $this->application = $application = new FakeApplication(__DIR__);
     }
 
@@ -186,6 +188,8 @@ class ApiControllerTest extends TestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         $this->application = null;
     }
 

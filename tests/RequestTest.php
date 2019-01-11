@@ -146,6 +146,8 @@ class RequestTest extends TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         $this->application = new FakeApplication(__DIR__);
         $this->application->addRoute(new Route('', BasicTestController::class));
         $this->application->addRoute(new Route('resultTypes', ResultTypesController::class));
@@ -157,6 +159,8 @@ class RequestTest extends TestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         $this->application = null;
     }
 
