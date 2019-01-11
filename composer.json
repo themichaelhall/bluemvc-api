@@ -3,6 +3,7 @@
   "description": "API extension for the BlueMvc PHP framework",
   "homepage": "https://bluemvc.com/",
   "license": "MIT",
+  "type": "library",
   "keywords": [
     "blue",
     "mvc",
