@@ -125,7 +125,7 @@ class RequestTest extends TestCase
 
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
         self::assertSame([], iterator_to_array($response->getHeaders()));
-        self::assertContains($expectedContent, $response->getContent());
+        self::assertStringContainsString($expectedContent, $response->getContent());
     }
 
     /**
@@ -144,7 +144,7 @@ class RequestTest extends TestCase
     /**
      * Set up.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -157,7 +157,7 @@ class RequestTest extends TestCase
     /**
      * Tear down.
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
