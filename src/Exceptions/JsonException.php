@@ -8,12 +8,14 @@ declare(strict_types=1);
 
 namespace BlueMvc\Api\Exceptions;
 
+use Exception;
+
 /**
  * Exception thrown on JSON failure.
  *
  * @since 2.1.0
  */
-class JsonException extends \Exception
+class JsonException extends Exception
 {
     /**
      * Constructs the exception.
