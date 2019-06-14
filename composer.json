@@ -21,7 +21,7 @@
     "php": ">=7.1",
     "ext-json": "*",
     "datatypes/datatypes": "^1.0||^2.0",
-    "bluemvc/bluemvc-core": "^2.1@dev"
+    "bluemvc/bluemvc-core": "^2.1"
   },
   "require-dev": {
     "bluemvc/bluemvc-fakes": "^2.0",
@@ -35,11 +35,6 @@
   "autoload-dev": {
     "psr-4": {
       "BlueMvc\\Api\\Tests\\": "tests"
-    }
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-develop": "2.1-dev"
     }
   }
 }
