@@ -1,3 +1,5 @@
+## Unreleased
+
 ## [2.1.0] - 2019-06-14
 - Added ApiResultException class.
 - Added getJsonEncodeOptions method to ApiController class.
