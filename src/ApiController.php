@@ -9,20 +9,23 @@ declare(strict_types=1);
 namespace BlueMvc\Api;
 
 use BlueMvc\Api\Exceptions\JsonException;
-use BlueMvc\Core\Base\AbstractController;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ActionResults\ActionResultInterface;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
+use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
+use BlueMvc\Core\Traits\ControllerTrait;
 
 /**
  * Class representing an API controller.
  *
  * @since 1.1.0
  */
-abstract class ApiController extends AbstractController
+abstract class ApiController implements ControllerInterface
 {
+    use ControllerTrait;
+
     /**
      * Constructs the controller.
      *
@@ -30,8 +33,6 @@ abstract class ApiController extends AbstractController
      */
     public function __construct()
     {
-        parent::__construct();
-
         $this->content = null;
     }
 
@@ -62,7 +63,7 @@ abstract class ApiController extends AbstractController
      */
     public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $action, array $parameters = []): void
     {
-        parent::processRequest($application, $request, $response, $action, $parameters);
+        $this->init($application, $request, $response);
 
         if (!$this->readContent()) {
             return;
@@ -74,7 +75,9 @@ abstract class ApiController extends AbstractController
             $parameters = array_merge([$action], $parameters);
         }
 
-        if (!$this->tryInvokeActionMethod($method, $parameters, false, $result, $hasFoundActionMethod)) {
+        if (!$this->tryInvokeActionMethod($method, $parameters, false, function ($result) {
+            $this->handleResult($result);
+        }, $hasFoundActionMethod)) {
             $statusCode = $hasFoundActionMethod ?
                 new StatusCode(StatusCode::NOT_FOUND) :
                 new StatusCode(StatusCode::METHOD_NOT_ALLOWED);
@@ -82,8 +85,6 @@ abstract class ApiController extends AbstractController
 
             return;
         }
-
-        $this->handleResult($result);
     }
 
     /**
