@@ -20,7 +20,7 @@ class ResultTypesController extends ApiController
      *
      * @return NotModifiedResult The result.
      */
-    public function getAction()
+    public function getAction(): NotModifiedResult
     {
         return new NotModifiedResult();
     }
@@ -30,7 +30,7 @@ class ResultTypesController extends ApiController
      *
      * @return ApiResult The result.
      */
-    public function postAction()
+    public function postAction(): ApiResult
     {
         return new ApiResult(['Message' => 'Resource was created'], new StatusCode(StatusCode::CREATED));
     }

@@ -16,7 +16,7 @@ class InvalidJsonResultTestController extends ApiController
      *
      * @return array
      */
-    public function getAction()
+    public function getAction(): array
     {
         return [
             'Foo' => NAN,
@@ -28,7 +28,7 @@ class InvalidJsonResultTestController extends ApiController
      *
      * @return array
      */
-    public function postAction()
+    public function postAction(): array
     {
         return [
             'Bar' => 'Baz' . chr(220),

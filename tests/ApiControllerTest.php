@@ -50,9 +50,9 @@ class ApiControllerTest extends TestCase
     /**
      * Data provider for testBasicTestController.
      *
-     * @return array
+     * @return array[]
      */
-    public function basicTestControllerDataProvider()
+    public function basicTestControllerDataProvider(): array
     {
         return [
             ['', 'get', null, StatusCode::OK, 'application/json', '{"actionMethod":"getAction","content":null}'],
@@ -108,9 +108,9 @@ class ApiControllerTest extends TestCase
     /**
      * Data provider for testResultTypesTestController.
      *
-     * @return array
+     * @return array[]
      */
-    public function resultTypesTestControllerDataProvider()
+    public function resultTypesTestControllerDataProvider(): array
     {
         return [
             ['get', StatusCode::NOT_MODIFIED, null, ''],
@@ -163,9 +163,9 @@ class ApiControllerTest extends TestCase
     /**
      * Data provider for testInvalidJsonResultTestController.
      *
-     * @return array
+     * @return array[]
      */
-    public function invalidJsonResultTestControllerDataProvider()
+    public function invalidJsonResultTestControllerDataProvider(): array
     {
         return [
             ['get', 'The value includes either NAN or INF (JSON_ERROR_INF_OR_NAN).', JSON_ERROR_INF_OR_NAN],

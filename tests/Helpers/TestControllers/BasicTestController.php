@@ -16,7 +16,7 @@ class BasicTestController extends ApiController
      *
      * @return array The result.
      */
-    public function getAction()
+    public function getAction(): array
     {
         return [
             'actionMethod' => 'getAction',
@@ -29,7 +29,7 @@ class BasicTestController extends ApiController
      *
      * @return array The result.
      */
-    public function postAction()
+    public function postAction(): array
     {
         return [
             'actionMethod' => 'postAction',
@@ -44,7 +44,7 @@ class BasicTestController extends ApiController
      *
      * @return array The result.
      */
-    public function patchAction($parameter)
+    public function patchAction(string $parameter): array
     {
         return [
             'actionMethod' => 'patchAction',

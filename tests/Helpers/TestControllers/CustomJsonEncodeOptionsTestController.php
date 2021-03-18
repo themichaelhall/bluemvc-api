@@ -14,9 +14,9 @@ class CustomJsonEncodeOptionsTestController extends ApiController
     /**
      * GET action.
      *
-     * @return array The result.
+     * @return string[] The result.
      */
-    public function getAction()
+    public function getAction(): array
     {
         return [
             'Bar',

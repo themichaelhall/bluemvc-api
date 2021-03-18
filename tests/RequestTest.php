@@ -49,9 +49,9 @@ class RequestTest extends TestCase
     /**
      * Data provider for testBasicRequests.
      *
-     * @return array
+     * @return array[]
      */
-    public function basicRequestsDataProvider()
+    public function basicRequestsDataProvider(): array
     {
         return [
             ['/', 'get', null, StatusCode::OK, ['Content-Type' => 'application/json'], '{"actionMethod":"getAction","content":null}'],
@@ -95,9 +95,9 @@ class RequestTest extends TestCase
     /**
      * Data provider for testResultTypes.
      *
-     * @return array
+     * @return array[]
      */
-    public function resultTypesDataProvider()
+    public function resultTypesDataProvider(): array
     {
         return [
             ['/resultTypes/', 'GET', null, StatusCode::NOT_MODIFIED, [], ''],
@@ -131,9 +131,9 @@ class RequestTest extends TestCase
     /**
      * Data provider for testInvalidJsonResult.
      *
-     * @return array
+     * @return array[]
      */
-    public function invalidJsonResultDataProvider()
+    public function invalidJsonResultDataProvider(): array
     {
         return [
             ['get', 'The value includes either NAN or INF (JSON_ERROR_INF_OR_NAN).'],
