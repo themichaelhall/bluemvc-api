@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is a part of the bluemvc-api package.
  *
  * Read more at https://bluemvc.com/
  */
+
 declare(strict_types=1);
 
 namespace BlueMvc\Api;
@@ -75,15 +77,15 @@ abstract class ApiController implements ControllerInterface
             $parameters = array_merge([$action], $parameters);
         }
 
-        if (!$this->tryInvokeActionMethod($method, $parameters, false, function ($result) {
+        $handleResultFunction = function ($result) {
             $this->handleResult($result);
-        }, $hasFoundActionMethod)) {
+        };
+
+        if (!$this->tryInvokeActionMethod($method, $parameters, false, $handleResultFunction, $hasFoundActionMethod)) {
             $statusCode = $hasFoundActionMethod ?
                 new StatusCode(StatusCode::NOT_FOUND) :
                 new StatusCode(StatusCode::METHOD_NOT_ALLOWED);
             $response->setStatusCode($statusCode);
-
-            return;
         }
     }
 

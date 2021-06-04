@@ -180,7 +180,7 @@ class ApiControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->application = $application = new FakeApplication(__DIR__);
+        $this->application = new FakeApplication(__DIR__);
     }
 
     /**
