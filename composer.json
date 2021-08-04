@@ -1,6 +1,6 @@
 {
   "name": "bluemvc/bluemvc-api",
-  "description": "API extension for the BlueMvc PHP framework",
+  "description": "REST API building tools for the BlueMvc PHP framework",
   "homepage": "https://bluemvc.com/",
   "license": "MIT",
   "type": "library",

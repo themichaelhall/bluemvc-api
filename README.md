@@ -10,7 +10,7 @@
 [![Latest Stable Version](https://poser.pugx.org/bluemvc/bluemvc-api/v/stable)](https://packagist.org/packages/bluemvc/bluemvc-api)
 [![Total Downloads](https://poser.pugx.org/bluemvc/bluemvc-api/downloads)](https://packagist.org/packages/bluemvc/bluemvc-api)
 
-API extension for the [BlueMvc PHP framework](https://github.com/themichaelhall/bluemvc).
+REST API building tools for the [BlueMvc PHP framework](https://github.com/themichaelhall/bluemvc).
 
 ## Requirements
 
