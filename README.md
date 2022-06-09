@@ -14,7 +14,7 @@ REST API building tools for the [BlueMvc PHP framework](https://github.com/themi
 
 ## Requirements
 
-- PHP >= 7.3
+- PHP >= 8.0
 
 ## Install with Composer
 
