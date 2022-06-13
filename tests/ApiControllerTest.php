@@ -176,7 +176,7 @@ class ApiControllerTest extends TestCase
     /**
      * Set up.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -184,17 +184,7 @@ class ApiControllerTest extends TestCase
     }
 
     /**
-     * Tear down.
+     * @var FakeApplication The application.
      */
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->application = null;
-    }
-
-    /**
-     * @var FakeApplication My application.
-     */
-    private $application;
+    private FakeApplication $application;
 }

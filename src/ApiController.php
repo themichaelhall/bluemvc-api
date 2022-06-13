@@ -60,8 +60,6 @@ abstract class ApiController implements ControllerInterface
      * @param ResponseInterface    $response    The response.
      * @param string               $action      The action.
      * @param array                $parameters  The parameters.
-     *
-     * @throws JsonException If result could not be encoded as JSON.
      */
     public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $action, array $parameters = []): void
     {
@@ -108,7 +106,7 @@ abstract class ApiController implements ControllerInterface
      *
      * @throws JsonException If result could not be encoded as JSON.
      */
-    private function handleResult($result): void
+    private function handleResult(mixed $result): void
     {
         if ($result instanceof ActionResultInterface) {
             $result->updateResponse($this->getApplication(), $this->getRequest(), $this->getResponse());
@@ -156,5 +154,5 @@ abstract class ApiController implements ControllerInterface
     /**
      * @var array|null My content or null if no content.
      */
-    private $content;
+    private ?array $content;
 }

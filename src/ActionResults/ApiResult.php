@@ -28,10 +28,10 @@ class ApiResult implements ActionResultInterface
      *
      * @since 1.1.0
      *
-     * @param mixed|null          $content    The content.
+     * @param mixed               $content    The content.
      * @param StatusCodeInterface $statusCode The status code.
      */
-    public function __construct($content, StatusCodeInterface $statusCode)
+    public function __construct(mixed $content, StatusCodeInterface $statusCode)
     {
         $this->content = $content;
         $this->statusCode = $statusCode;
@@ -54,12 +54,12 @@ class ApiResult implements ActionResultInterface
     }
 
     /**
-     * @var StatusCodeInterface My status code.
+     * @var StatusCodeInterface The status code.
      */
-    private $statusCode;
+    private StatusCodeInterface $statusCode;
 
     /**
-     * @var mixed|null My content.
+     * @var mixed The content.
      */
-    private $content;
+    private mixed $content;
 }
